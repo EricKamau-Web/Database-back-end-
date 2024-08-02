@@ -6,7 +6,7 @@ from django.shortcuts import render,redirect
 from requests.auth import HTTPBasicAuth
 
 from Hospitalapp.credentials import MpesaAccessToken, LipanaMpesaPpassword
-from Hospitalapp.models import Appointment,Patient
+from Hospitalapp.models import Appointment,Patient,member
 from Hospitalapp.forms import AppointmentForm
 
 # Create your views here.
@@ -110,3 +110,21 @@ def stk(request):
         }
         response = requests.post(api_url, json=request, headers=headers)
         return HttpResponse('Payment made successfully')
+
+
+
+def register(request):
+    if request.method =="POST":
+        Member=member(
+            fullname = request.POST['fullname'],
+            username=request.POST['username'],
+            password = request.POST['password'])
+        member.save()
+        return redirect('/login')
+    else:
+        return render(request,'register.html')
+
+
+
+def login(request):
+    return render(request,'login.html')
